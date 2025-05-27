@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arm Manipulator Control</title>
+    <meta charset="utf-8" />
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        button { padding: 15px 30px; font-size: 16px; margin: 10px; cursor: pointer; }
+        #status { margin-top: 20px; font-size: 18px; color: green; }
+    </style>
+</head>
+<body>
+
+<h1>Arm Manipulator Control</h1>
+
+<!-- Gripper Controls -->
+<button onclick="controlGripper('open')">Open Gripper</button>
+<button onclick="controlGripper('close')">Close Gripper</button>
+
+<!-- Shoulder Controls -->
+<br />
+<button onclick="moveShoulder('increase')">Shoulder Up (+20°)</button>
+<button onclick="moveShoulder('decrease')">Shoulder Down (-20°)</button>
+
+<!-- Elbow Controls -->
+<br />
+<button onclick="moveElbow('increase')">Elbow Up (+20°)</button>
+<button onclick="moveElbow('decrease')">Elbow Down (-20°)</button>
+
+<div id="status"></div>
+
+<script>
+    function controlGripper(action) {
+        fetch(`/gripper/${action}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.status;
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = "Error: " + error;
+            });
+    }
+
+    function moveShoulder(direction) {
+        fetch(`/shoulder/${direction}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.status;
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = "Error moving shoulder: " + error;
+            });
+    }
+
+    function moveElbow(direction) {
+        fetch(`/elbow/${direction}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.status;
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = "Error moving elbow: " + error;
+            });
+    }
+</script>
+
+</body>
+</html>
